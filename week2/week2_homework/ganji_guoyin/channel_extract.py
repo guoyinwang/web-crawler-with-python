@@ -1,6 +1,7 @@
 from bs4 import BeautifulSoup
 import requests
 import pymongo
+import time
 
 start_url = 'http://bj.ganji.com/wu/'
 url_add = 'http://bj.ganji.com'
@@ -9,7 +10,7 @@ client = pymongo.MongoClient('localhost', 27017)
 ganji = client['ganji']
 page_link = ganji['page_link']
 
-def get_channel_url(start_url, ):
+def get_channel_url(start_url, url_add = url_add):
 
     wb_data = requests.get(start_url)
     soup = BeautifulSoup(wb_data.text, 'lxml')
@@ -41,7 +42,7 @@ def get_link_url(page_url):
             else:
                 print('exist')
                 continue
-
+        time.sleep(1)
 
 
 
