@@ -26,11 +26,28 @@ def getExternalLink(soup, excludeUrl):
 def splitAddress(address):
     addressParts = address.replace("http://", "").split("/")
     return addressParts
-def parseExternalLink(startingPage):
+
+# def parseExternalLink(startingPage):
+#     wb_data = requests.get(startingPage)
+#     soup = BeautifulSoup(wb_data, 'lxml')
+#     externalLinks = getExternalLink(soup, splitAddress(startingPage)[0])
+#     if len(externalLinks) == 0:
+#         internalLinks = getInternalLink(soup, startingPage)
+
+def getRandomExternalLink(startingPage):
     wb_data = requests.get(startingPage)
-    soup = BeautifulSoup(wb_data, 'lxml')
+    soup = BeautifulSoup(wb_data.text)
     externalLinks = getExternalLink(soup, splitAddress(startingPage)[0])
     if len(externalLinks) == 0:
         internalLinks = getInternalLink(soup, startingPage)
+        return getExternalLink(internalLinks[random.randint(0, len(internalLinks) - 1)])
+    else:
+        return externalLinks[random.randint(0, len(externalLinks) - 1)]
+def followExternalOnly(startingSite):
+    externalLink = getRandomExternalLink(startingSite)
+    print("Random link is: " + externalLink)
+    followExternalOnly(externalLink)
 
+
+followExternalOnly('http://oreilly.com')
 
